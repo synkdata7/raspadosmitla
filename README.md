@@ -19,9 +19,8 @@ Landing page móvil-first para el negocio de raspados artesanales **Raspados Did
 - [Personalización](#-personalización)
 - [Despliegue en producción](#-despliegue-en-producción)
   - [Opción 1: Vercel (Recomendado)](#opción-1-vercel-recomendado)
-  - [Opción 2: Servidor propio (VPS)](#opción-2-servidor-propio-vps)
-  - [Opción 3: Railway / Render](#opción-3-railway--render)
-- [Licencia](#-licencia)
+  - [Opción 2: Railway](#opción-2-railway)
+- [Actualizar la página](#-actualizar-la-página)
 
 ---
 
@@ -110,7 +109,6 @@ raspados-didxsay/
 │   │   └── api/               # API routes
 │   ├── components/ui/         # Componentes shadcn/ui
 │   └── hooks/                 # Custom hooks
-├── Caddyfile                   # Configuración de Caddy (producción)
 ├── next.config.ts              # Configuración de Next.js
 ├── package.json
 └── README.md
@@ -220,12 +218,8 @@ Vercel te asigna una URL como: `raspados-didxsay.vercel.app`
 1. En el dashboard de Vercel, ve a **Settings > Domains**
 2. Agrega tu dominio (ej: `raspadosdidxsay.com`)
 3. En tu proveedor de dominios, apunta los DNS:
-   - Tipo: `CNAME`
-   - Nombre: `www`
-   - Valor: `cname.vercel-dns.com`
-   - Tipo: `A`
-   - Nombre: `@`
-   - Valor: `76.76.21.21`
+   - Tipo: `CNAME` | Nombre: `www` | Valor: `cname.vercel-dns.com`
+   - Tipo: `A` | Nombre: `@` | Valor: `76.76.21.21`
 
 **Ventajas de Vercel:**
 - Plan gratuito suficiente para tu landing
@@ -236,105 +230,39 @@ Vercel te asigna una URL como: `raspados-didxsay.vercel.app`
 
 ---
 
-### Opción 2: Servidor propio (VPS)
+### Opción 2: Railway
 
-Si prefieres tener control total con tu propio servidor (DigitalOcean, Hostinger, AWS, etc.).
+Otra plataforma sencilla con deploy desde GitHub, ideal si ya tienes experiencia con Railway.
 
-**Paso 1: Preparar el servidor**
+**Paso 1: Subir el código a GitHub** (igual que Vercel, ver arriba)
 
-```bash
-# Instalar Node.js 20+
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
+**Paso 2: Conectar con Railway**
 
-# Instalar Bun
-curl -fsSL https://bun.sh/install | bash
+1. Ve a [railway.app](https://railway.app) y regístrate con tu cuenta de GitHub
+2. Haz clic en **"New Project"**
+3. Selecciona **"Deploy from GitHub repo"**
+4. Elige el repositorio `raspados-didxsay`
+5. Railway detecta Next.js automáticamente y comienza el deploy
+6. Espera 2-3 minutos y listo
 
-# Instalar Caddy (proxy reverso con SSL automático)
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install caddy
-```
+**Paso 3: Obtener tu URL**
 
-**Paso 2: Subir el código al servidor**
+Railway te asigna una URL como: `raspados-didxsay.up.railway.app`
 
-```bash
-# Desde tu máquina local
-scp -r /home/z/my-project/* usuario@TU-SERVIDOR:/var/www/raspados-didxsay/
+También puedes generar un dominio personalizado desde **Settings > Networking** en el dashboard de Railway.
 
-# O clonar desde GitHub
-ssh usuario@TU-SERVIDOR
-cd /var/www
-git clone https://github.com/TU-USUARIO/raspados-didxsay.git
-cd raspados-didxsay
-```
-
-**Paso 3: Construir y ejecutar**
-
-```bash
-bun install
-bun run build
-
-# Ejecutar en background con systemd o pm2
-# Opción A: Con pm2
-npm install -g pm2
-pm2 start bun --name "raspados" -- run start
-pm2 save
-pm2 startup
-
-# Opción B: Con systemd (crear archivo /etc/systemd/system/raspados.service)
-```
-
-**Paso 4: Configurar Caddy**
-
-Edita `/etc/caddy/Caddyfile`:
-
-```
-raspadosdidxsay.com {
-    reverse_proxy localhost:3000 {
-        header_up Host {host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-        header_up X-Real-IP {remote_host}
-    }
-}
-```
-
-```bash
-sudo systemctl reload caddy
-```
-
-Caddy generará automáticamente el certificado SSL y tu sitio estará en `https://raspadosdidxsay.com`.
-
----
-
-### Opción 3: Railway / Render
-
-Alternativas similares a Vercel con deploy desde GitHub.
-
-**Railway:**
-1. Ve a [railway.app](https://railway.app) y regístrate con GitHub
-2. Clic en **"New Project" > "Deploy from GitHub repo"**
-3. Selecciona tu repositorio
-4. Railway detecta Next.js y despliega automáticamente
-5. Te asigna una URL como `raspados-didxsay.up.railway.app`
-
-**Render:**
-1. Ve a [render.com](https://render.com) y regístrate con GitHub
-2. Clic en **"New" > "Web Service"**
-3. Conecta tu repositorio
-4. Configura:
-   - Build Command: `bun install && bun run build`
-   - Start Command: `bun run start`
-5. Clic en **"Create Web Service"**
+**Ventajas de Railway:**
+- Deploy automático desde GitHub
+- SSL/HTTPS incluido
+- Escalabilidad automática
+- Panel de control con logs en tiempo real
+- Soporte para variables de entorno
 
 ---
 
 ## 🔄 Actualizar la página (después de cambios)
 
-Si usas **Vercel**, simplemente haz push a GitHub y se publica automáticamente:
+Tanto en Vercel como en Railway, los cambios se publican automáticamente al hacer push a GitHub:
 
 ```bash
 git add .
@@ -342,23 +270,7 @@ git commit -m "Actualizar precios o sabores"
 git push
 ```
 
-Si usas **servidor propio**, reconstruye después de cada cambio:
-
-```bash
-cd /var/www/raspados-didxsay
-git pull
-bun install
-bun run build
-pm2 restart raspados
-```
-
----
-
-## 📞 Soporte
-
-Desarrollado por **Synkdata** para Raspados Didxsay.
-
-Para cualquier cambio o problema, contacta al desarrollador.
+La plataforma detecta el cambio y redespliega automáticamente en 1-2 minutos. No necesitas hacer nada manual.
 
 ---
 

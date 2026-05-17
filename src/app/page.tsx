@@ -23,7 +23,7 @@ const PRECIOS = {
 // Configuración del negocio
 const WHATSAPP_NUMBER = '9512645961'
 const GOOGLE_MAPS_URL =
-  'https://www.google.com/maps/search/Campo+de+Futbol+Las+Salinas+Oaxaca'
+  'https://www.google.com/maps/search/Campo+de+Futbol+San+Pablo+Villa+de+Mitla+Oaxaca'
 
 // ---- Catálogo de sabores con su ficha individual ----
 interface Sabor {
@@ -274,7 +274,7 @@ export default function Home() {
             Raspados Didxsay
           </h1>
           <p className="text-sm md:text-base font-medium text-center max-w-xs" style={{ color: 'rgba(255,255,255,0.9)', fontFamily: 'var(--font-inter)' }}>
-            Raspados artesanales con los sabores más frescos de Oaxaca
+            Raspados artesanales con los sabores más frescos de San Pablo Villa de Mitla
           </p>
           <div className="mt-2 px-5 py-2.5 rounded-full flex items-center gap-2 animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.35)', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
             <span className="text-xl">🛵</span>
@@ -480,7 +480,7 @@ export default function Home() {
             <h2 className="text-xl font-bold" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>📍 Ubicación</h2>
             <div className="p-4" style={{ backgroundColor: 'rgba(214,48,49,0.04)', borderRadius: '14px', border: '1px solid rgba(214,48,49,0.1)' }}>
               <p className="font-semibold text-sm" style={{ color: '#2d3436', fontFamily: 'var(--font-inter)' }}>Nos ubicamos en:</p>
-              <p className="text-base mt-1 font-medium" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>⚽ Campo de Fútbol</p>
+              <p className="text-base mt-1 font-medium" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>⚽ Campo de Fútbol, San Pablo Villa de Mitla</p>
             </div>
             <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
               <button className="w-full py-3 px-6 flex items-center justify-center gap-2 text-white text-sm font-bold transition-all" style={{ backgroundColor: '#d63031', borderRadius: '14px', fontFamily: 'var(--font-inter)', boxShadow: '0 4px 14px rgba(214,48,49,0.3)' }}>
@@ -562,8 +562,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-6 px-4 text-center" style={{ background: 'linear-gradient(135deg, #d63031, #e74c3c 40%, #ffa502)', color: '#ffffff' }}>
         <p className="font-bold text-lg" style={{ fontFamily: 'var(--font-fredoka)' }}>Raspados Didxsay</p>
-        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-inter)' }}>⚽ Nos ubicamos en el campo de fútbol</p>
-        <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-inter)' }}>Hecho con ❤️ en Oaxaca</p>
+        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-inter)' }}>⚽ Nos ubicamos en el campo de fútbol, San Pablo Villa de Mitla</p>
+        <p className="text-xs mt-3 pt-3" style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-inter)', borderTop: '1px solid rgba(255,255,255,0.15)' }}>Powered by <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 700 }}>Synkdata</span></p>
       </footer>
     </div>
   )

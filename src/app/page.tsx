@@ -266,11 +266,11 @@ export default function Home() {
         <div className="absolute -bottom-16 -right-16 w-52 h-52 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(241,196,15,0.2)' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} />
 
-        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-8 gap-4">
-          <div className="w-28 h-28 md:w-36 md:h-36 relative rounded-full overflow-hidden shadow-2xl" style={{ border: '4px solid rgba(255,255,255,0.9)', backgroundColor: '#ffffff' }}>
-            <Image src="/logo.png" alt="Raspados Didxsay" fill className="object-contain" priority />
+        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-10 gap-5">
+          <div className="w-40 h-40 md:w-52 md:h-52 relative rounded-full overflow-hidden shadow-2xl" style={{ border: '5px solid rgba(255,255,255,0.9)', backgroundColor: '#ffffff' }}>
+            <Image src="/logo.png" alt="Raspados Didxsay" fill className="object-contain p-1" priority />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-center drop-shadow-lg" style={{ fontFamily: 'var(--font-fredoka)', color: '#ffffff' }}>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-center drop-shadow-lg" style={{ fontFamily: 'var(--font-fredoka)', color: '#ffffff' }}>
             Raspados Didxsay
           </h1>
           <p className="text-sm md:text-base font-medium text-center max-w-xs" style={{ color: 'rgba(255,255,255,0.9)', fontFamily: 'var(--font-inter)' }}>

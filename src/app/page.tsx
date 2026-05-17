@@ -36,6 +36,7 @@ interface Sabor {
   color: string
   esEspecial?: boolean
   esTemporada?: boolean
+  bases?: string[]
 }
 
 const SABORES: Sabor[] = [
@@ -108,9 +109,10 @@ const SABORES: Sabor[] = [
     emoji: '🌶️',
     imagen: '/el-diablito.png',
     precio: PRECIOS.elDiablito,
-    descripcion: 'Tamarindo o Nanche cargado con chamoy, salsa y Tajín. ¡Pica pero sabe rico!',
+    descripcion: 'Clásico de Tamarindo, Nanche o Durazno, cargado con chamoy, salsa botanera y Tajín. ¡Pica pero sabe rico!',
     color: '#d63031',
     esEspecial: true,
+    bases: ['Tamarindo', 'Nanche', 'Durazno'],
   },
   {
     id: 'las-glorias',
@@ -118,7 +120,7 @@ const SABORES: Sabor[] = [
     emoji: '🌟',
     imagen: '/las-glorias.png',
     precio: PRECIOS.lasGlorias,
-    descripcion: 'Plátano fresco, jarabe artesanal, canela y doble leche condensada. ¡El favorito de la casa!',
+    descripcion: 'Sabor de fresa con plátano, leche, lechera y ese toque especial. ¡El favorito de la casa!',
     color: '#ffa502',
     esEspecial: true,
   },
@@ -147,7 +149,7 @@ const SABORES: Sabor[] = [
 // Extras disponibles para raspados
 const EXTRAS_DISPONIBLES = [
   { id: 'chamoy', label: 'Chamoy' },
-  { id: 'salsa', label: 'Salsa' },
+  { id: 'salsa', label: 'Salsa Botanera' },
   { id: 'tajin', label: 'Tajín' },
   { id: 'lechera', label: 'Lechera' },
 ]
@@ -159,6 +161,7 @@ export default function Home() {
   // ---- Estado dinámico por sabor ----
   const [cantidades, setCantidades] = useState<Record<string, number>>({})
   const [extrasSeleccionados, setExtrasSeleccionados] = useState<Record<string, string[]>>({})
+  const [basesSeleccionadas, setBasesSeleccionadas] = useState<Record<string, string>>({})
 
   // Botana
   const [botanaSeleccionada, setBotanaSeleccionada] = useState('')
@@ -218,7 +221,8 @@ export default function Home() {
                 .map((id) => EXTRAS_DISPONIBLES.find((e) => e.id === id)?.label)
                 .join(', ')
             : 'Sin extras'
-        lineas.push(`- ${cant}x ${s.nombre} con extras: ${extrasTexto}`)
+        const baseTexto = s.bases ? ` (Base: ${basesSeleccionadas[s.id] || s.bases[0]})` : ''
+        lineas.push(`- ${cant}x ${s.nombre}${baseTexto} con extras: ${extrasTexto}`)
       }
     })
 
@@ -299,6 +303,8 @@ export default function Home() {
                 onCantidadChange={(val) => setCantidad(sabor.id, val)}
                 extras={getExtras(sabor.id)}
                 onToggleExtra={(extraId) => toggleExtra(sabor.id, extraId)}
+                baseSeleccionada={basesSeleccionadas[sabor.id] || ''}
+                onBaseChange={(base) => setBasesSeleccionadas((prev) => ({ ...prev, [sabor.id]: base }))}
               />
             ))}
           </div>
@@ -318,6 +324,8 @@ export default function Home() {
                 onCantidadChange={(val) => setCantidad(sabor.id, val)}
                 extras={getExtras(sabor.id)}
                 onToggleExtra={(extraId) => toggleExtra(sabor.id, extraId)}
+                baseSeleccionada={basesSeleccionadas[sabor.id] || ''}
+                onBaseChange={(base) => setBasesSeleccionadas((prev) => ({ ...prev, [sabor.id]: base }))}
               />
             ))}
           </div>
@@ -341,6 +349,8 @@ export default function Home() {
                   onCantidadChange={(val) => setCantidad(sabor.id, val)}
                   extras={getExtras(sabor.id)}
                   onToggleExtra={(extraId) => toggleExtra(sabor.id, extraId)}
+                  baseSeleccionada={basesSeleccionadas[sabor.id] || ''}
+                  onBaseChange={(base) => setBasesSeleccionadas((prev) => ({ ...prev, [sabor.id]: base }))}
                 />
               ))}
             </div>
@@ -494,10 +504,11 @@ export default function Home() {
                 const cant = getCantidad(s.id)
                 if (cant === 0) return null
                 const extras = getExtras(s.id)
+                const baseTexto = s.bases ? ` (Base: ${basesSeleccionadas[s.id] || s.bases[0]})` : ''
                 return (
                   <div key={s.id} className="flex justify-between items-center">
                     <span style={{ color: '#2d3436' }}>
-                      {cant}x {s.nombre}
+                      {cant}x {s.nombre}{baseTexto}
                       {extras.length > 0 && ` + ${extras.map((id) => EXTRAS_DISPONIBLES.find((e) => e.id === id)?.label).join(', ')}`}
                     </span>
                     <span className="font-bold" style={{ color: s.esEspecial ? '#ffa502' : '#d63031' }}>${cant * s.precio}</span>
@@ -568,14 +579,17 @@ function SaborCard({
   onCantidadChange,
   extras,
   onToggleExtra,
+  baseSeleccionada,
+  onBaseChange,
 }: {
   sabor: Sabor
   cantidad: number
   onCantidadChange: (val: number) => void
   extras: string[]
   onToggleExtra: (extraId: string) => void
+  baseSeleccionada: string
+  onBaseChange: (base: string) => void
 }) {
-  const borderColor = sabor.esEspecial ? sabor.color : sabor.color
   const estaSeleccionado = cantidad > 0
 
   return (
@@ -678,6 +692,37 @@ function SaborCard({
         <div
           className="px-4 pb-4 pt-2 space-y-2 animate-in fade-in slide-in-from-top-1 duration-200"
         >
+          {/* Base selector for Diablito */}
+          {sabor.bases && sabor.bases.length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-xs font-semibold" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>
+                Elige la base:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {sabor.bases.map((base) => (
+                  <button
+                    key={base}
+                    onClick={() => onBaseChange(base)}
+                    className="px-3 py-1.5 text-xs font-semibold transition-all"
+                    style={{
+                      borderRadius: '50px',
+                      border: baseSeleccionada === base
+                        ? `2px solid ${sabor.color}`
+                        : '2px solid #e0e0e0',
+                      backgroundColor: baseSeleccionada === base
+                        ? `${sabor.color}18`
+                        : '#fafafa',
+                      color: baseSeleccionada === base ? sabor.color : '#636e72',
+                      fontFamily: 'var(--font-inter)',
+                    }}
+                  >
+                    {base}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <p className="text-xs font-semibold" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>
             Acompañamientos extra:
           </p>

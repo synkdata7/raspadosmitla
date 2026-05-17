@@ -23,7 +23,7 @@ const PRECIOS = {
 // Configuración del negocio
 const WHATSAPP_NUMBER = '9512645961'
 const GOOGLE_MAPS_URL =
-  'https://www.google.com/maps/search/Calle+Primera+Cerrada+de+Las+Salinas+7'
+  'https://www.google.com/maps/search/Campo+de+Futbol+Las+Salinas+Oaxaca'
 
 // ---- Catálogo de sabores con su ficha individual ----
 interface Sabor {
@@ -479,9 +479,8 @@ export default function Home() {
           <div className="p-5 space-y-4">
             <h2 className="text-xl font-bold" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>📍 Ubicación</h2>
             <div className="p-4" style={{ backgroundColor: 'rgba(214,48,49,0.04)', borderRadius: '14px', border: '1px solid rgba(214,48,49,0.1)' }}>
-              <p className="font-semibold text-sm" style={{ color: '#2d3436', fontFamily: 'var(--font-inter)' }}>Dirección del negocio:</p>
-              <p className="text-base mt-1 font-medium" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>Calle Primera Cerrada de Las Salinas #7</p>
-              <p className="text-sm mt-1" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>Junto al campo de fútbol</p>
+              <p className="font-semibold text-sm" style={{ color: '#2d3436', fontFamily: 'var(--font-inter)' }}>Nos ubicamos en:</p>
+              <p className="text-base mt-1 font-medium" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>⚽ Campo de Fútbol</p>
             </div>
             <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
               <button className="w-full py-3 px-6 flex items-center justify-center gap-2 text-white text-sm font-bold transition-all" style={{ backgroundColor: '#d63031', borderRadius: '14px', fontFamily: 'var(--font-inter)', boxShadow: '0 4px 14px rgba(214,48,49,0.3)' }}>
@@ -563,7 +562,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-6 px-4 text-center" style={{ background: 'linear-gradient(135deg, #d63031, #e74c3c 40%, #ffa502)', color: '#ffffff' }}>
         <p className="font-bold text-lg" style={{ fontFamily: 'var(--font-fredoka)' }}>Raspados Didxsay</p>
-        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-inter)' }}>Calle Primera Cerrada de Las Salinas #7</p>
+        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-inter)' }}>⚽ Nos ubicamos en el campo de fútbol</p>
         <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-inter)' }}>Hecho con ❤️ en Oaxaca</p>
       </footer>
     </div>

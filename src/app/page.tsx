@@ -289,13 +289,13 @@ export default function Home() {
       {/* ============================== */}
       <main className="flex-1 w-full max-w-lg mx-auto px-4 py-6 space-y-6">
 
-        {/* ---- Sección: Sabores Clásicos ---- */}
+        {/* ---- Sección: Especiales (PRIMERO) ---- */}
         <section>
           <h2 className="text-xl font-bold mb-4 px-1" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>
-            🍧 Nuestros Sabores
+            ⭐ Especiales
           </h2>
-          <div className="space-y-4">
-            {saboresRegulares.map((sabor) => (
+          <div className="space-y-5">
+            {saboresEspeciales.map((sabor) => (
               <SaborCard
                 key={sabor.id}
                 sabor={sabor}
@@ -310,13 +310,13 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---- Sección: Especiales ---- */}
+        {/* ---- Sección: Sabores Clásicos ---- */}
         <section>
           <h2 className="text-xl font-bold mb-4 px-1" style={{ color: '#d63031', fontFamily: 'var(--font-fredoka)' }}>
-            ⭐ Especiales
+            🍧 Nuestros Sabores
           </h2>
           <div className="space-y-4">
-            {saboresEspeciales.map((sabor) => (
+            {saboresRegulares.map((sabor) => (
               <SaborCard
                 key={sabor.id}
                 sabor={sabor}
@@ -591,7 +591,187 @@ function SaborCard({
   onBaseChange: (base: string) => void
 }) {
   const estaSeleccionado = cantidad > 0
+  const esGrande = sabor.esEspecial
 
+  // Tarjeta GRANDE para especiales (foto full-width arriba)
+  if (esGrande) {
+    return (
+      <div
+        className="overflow-hidden transition-all"
+        style={{
+          borderRadius: '16px',
+          backgroundColor: '#ffffff',
+          boxShadow: estaSeleccionado
+            ? `0 8px 32px rgba(0,0,0,0.12)`
+            : '0 4px 20px rgba(0,0,0,0.06)',
+          border: `2.5px solid ${estaSeleccionado ? sabor.color : '#e8e8e8'}`,
+        }}
+      >
+        {/* Photo full-width */}
+        <div className="relative w-full h-52 bg-white">
+          <Image
+            src={sabor.imagen}
+            alt={sabor.nombre}
+            fill
+            className="object-cover"
+          />
+          <div
+            className="absolute top-3 right-3 px-4 py-1.5 text-white font-bold text-xl shadow-lg"
+            style={{
+              backgroundColor: sabor.color,
+              borderRadius: '50px',
+              fontFamily: 'var(--font-fredoka)',
+            }}
+          >
+            ${sabor.precio}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-5 space-y-3">
+          <div>
+            <h3 className="font-bold text-xl" style={{ color: sabor.color, fontFamily: 'var(--font-fredoka)' }}>
+              {sabor.emoji} {sabor.nombre}
+            </h3>
+            <p className="text-sm mt-1 leading-relaxed" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>
+              {sabor.descripcion}
+            </p>
+          </div>
+
+          {/* Quantity */}
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-lg" style={{ color: '#2d3436', fontFamily: 'var(--font-fredoka)' }}>
+              Cantidad
+            </span>
+            {cantidad === 0 ? (
+              <button
+                onClick={() => onCantidadChange(1)}
+                className="px-5 py-2 text-sm font-bold text-white transition-all"
+                style={{
+                  backgroundColor: sabor.color,
+                  borderRadius: '50px',
+                  fontFamily: 'var(--font-fredoka)',
+                  boxShadow: `0 4px 14px ${sabor.color}50`,
+                }}
+              >
+                Agregar
+              </button>
+            ) : (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onCantidadChange(cantidad - 1)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold"
+                  style={{ border: `2px solid ${sabor.color}`, color: sabor.color, backgroundColor: '#fff', fontFamily: 'var(--font-fredoka)' }}
+                >
+                  −
+                </button>
+                <span className="text-xl font-bold w-8 text-center" style={{ color: '#2d3436', fontFamily: 'var(--font-fredoka)' }}>
+                  {cantidad}
+                </span>
+                <button
+                  onClick={() => onCantidadChange(cantidad + 1)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold"
+                  style={{ border: `2px solid ${sabor.color}`, color: '#ffffff', backgroundColor: sabor.color, fontFamily: 'var(--font-fredoka)' }}
+                >
+                  +
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Base selector + Extras (shown when selected) */}
+          {estaSeleccionado && (
+            <div className="space-y-3 animate-in fade-in slide-in-from-top-1 duration-200 pt-1">
+              {/* Base selector */}
+              {sabor.bases && sabor.bases.length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="text-xs font-semibold" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>
+                    Elige la base:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {sabor.bases.map((base) => (
+                      <button
+                        key={base}
+                        onClick={() => onBaseChange(base)}
+                        className="px-3.5 py-1.5 text-xs font-semibold transition-all"
+                        style={{
+                          borderRadius: '50px',
+                          border: baseSeleccionada === base
+                            ? `2px solid ${sabor.color}`
+                            : '2px solid #e0e0e0',
+                          backgroundColor: baseSeleccionada === base
+                            ? `${sabor.color}18`
+                            : '#fafafa',
+                          color: baseSeleccionada === base ? sabor.color : '#636e72',
+                          fontFamily: 'var(--font-inter)',
+                        }}
+                      >
+                        {base}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Extras */}
+              <div className="space-y-1.5">
+                <p className="text-xs font-semibold" style={{ color: '#636e72', fontFamily: 'var(--font-inter)' }}>
+                  Acompañamientos extra:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {EXTRAS_DISPONIBLES.map((extra) => (
+                    <label
+                      key={extra.id}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer transition-all"
+                      style={{
+                        borderRadius: '50px',
+                        border: extras.includes(extra.id)
+                          ? `1.5px solid ${sabor.color}`
+                          : '1.5px solid #e0e0e0',
+                        backgroundColor: extras.includes(extra.id)
+                          ? `${sabor.color}10`
+                          : '#fafafa',
+                        fontFamily: 'var(--font-inter)',
+                      }}
+                    >
+                      <Checkbox
+                        checked={extras.includes(extra.id)}
+                        onCheckedChange={() => onToggleExtra(extra.id)}
+                        className="size-3.5 data-[state=checked]:bg-[var(--extra-color)] data-[state=checked]:border-[var(--extra-color)]"
+                        style={{ '--extra-color': sabor.color } as React.CSSProperties}
+                      />
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: extras.includes(extra.id) ? sabor.color : '#636e72' }}
+                      >
+                        {extra.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <span
+                  className="text-base font-bold px-3 py-1"
+                  style={{
+                    color: sabor.color,
+                    backgroundColor: `${sabor.color}12`,
+                    borderRadius: '8px',
+                    fontFamily: 'var(--font-fredoka)',
+                  }}
+                >
+                  Subtotal: ${cantidad * sabor.precio}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Tarjeta NORMAL para sabores regulares y temporada
   return (
     <div
       className="overflow-hidden transition-all"
